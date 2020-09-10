@@ -1,0 +1,214 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  height: 100vh;
+}
+
+.header {
+  display: flex;
+  flex-direction: row;  
+  min-height: 1.6rem;
+  max-height: 1.6rem;
+  text-align: center;
+  justify-content: flex-start;
+  font-size: 0.75rem;
+  font-weight: 400;
+  line-height: 0.5rem;
+  align-items: center;
+  background-color: #3d3d3d;
+  color: #c5c5c5;
+  padding: 0;
+}
+
+.searchInput {
+  margin: 0;
+  height: 100%;
+  width: 100%;
+  border: none;
+  background-color: transparent;
+  color: #c5c5c5;
+  padding: 4px !important;
+  -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+  -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+  box-sizing: border-box;         /* Opera/IE 8+ */
+}
+
+.searchInput::placeholder {
+  color: #afafaf;
+  padding: 4px;
+}
+
+*:focus{
+  outline: 1px solid cornflowerblue;
+}
+
+.footer {
+  display: flex;
+  flex-direction: row;
+  min-height: 1.4rem;
+  max-height: 1.4rem;
+  justify-content: flex-start;  
+  font-size: 0.75rem;
+  font-weight: 400;
+  background-color: rgb(119, 119, 119);
+  color: #ffffff;
+  padding: 0 8px;
+}
+
+.footerSpacer {
+  display: flex;
+  flex-grow: 1;
+}
+
+.footerButton {
+  display: flex;
+  margin: 0;
+  flex-direction: row;
+  height: 100%;
+  cursor: pointer;
+  padding: 0 4px;
+  background-color: transparent;
+  align-items: center;
+}
+
+.footerButton:hover {
+  background-color: rgb(145, 145, 145);
+}
+
+code {
+  font: inherit;
+  color: #c5c5c5;
+  font-size: 0.7rem;
+  font-weight: 400;
+  line-height: 0.7rem;
+  margin: 0;
+  padding: 1px 6px;
+  background-color: rgb(61, 61, 61);
+  border-radius: 4px;
+  border-bottom: 2px solid #575757;;
+}
+
+.commandLabel {
+  color: #969696;
+  font-size: 0.9rem;;
+  line-height: 0.9rem;
+  font-weight: 500;
+  position: absolute;
+  top: 50%;
+  width: 100%;
+  text-align: center;
+}
+
+.container {
+  padding: 0;
+  margin: 0;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;  
+  overflow: auto; 
+}
+
+
+
+.container h2 {
+  font-size: 5rem;
+}
+
+.container a {
+  font-size: 1.4rem;
+}
+
+.line {
+  display: flex;
+  flex-direction: row;
+  flex-shrink: 0;
+  font-family:Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New;
+  padding: 0;
+  margin: 0;
+  /* border-bottom: 1px solid #3d3d3d; */
+  cursor: pointer;
+  font-size: 0.9rem;
+  line-height: 1.2rem;
+  min-height: 0.9rem;
+}
+
+.line.selected {
+  background-color: #3d3d3d;
+}
+
+.line:hover {
+  background-color: #3d3d3d;
+}
+
+.gutter {  
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  padding: 10px 12px;
+  margin: 0;
+  min-width: 30px;
+  max-width: 30px;
+  color: #969696;
+  border-right: 4px solid #3d3d3d;
+}
+
+.TRACE {
+  border-color: #3d3d3d !important;
+}
+
+.DEBUG {
+  border-color: #3d3d3d !important;
+}
+
+.INFO {
+  border-color: #5b7fad !important;
+}
+
+.WARNING {
+  border-color: #c5ad43 !important;
+}
+
+.ERROR {
+  border-color: #a74545 !important;
+}
+
+.CRITICAL {
+  border-color: #000000 !important;
+}
+
+.logEntry {
+  color: #e2e2e2;
+  display: flex;
+  padding: 10px 12px;
+  margin: 0;
+  display: block;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  width: calc(100vw - 40px);
+  overflow: hidden;
+}
+
+.logTag {
+  display: flex;
+  flex-direction: row;
+}
+
+.logTag > * {
+  margin-right: 16px;
+}
+
+.logTagTime {
+  display: flex;
+  color: #969696;
+}
+
+.logTagLevel {
+  display: flex;
+  min-width: 40px;
+}
+
+.logTagMessage {
+  display: flex;
+}
