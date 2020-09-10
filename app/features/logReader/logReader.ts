@@ -16,7 +16,7 @@ export const openLogFileDialog = (window: BrowserWindow) => {
       const filePath = result.filePaths[0]?.replace(re, '\\\\');
       if (result.filePaths.length > 0) {
         app.addRecentDocument(filePath); // Verify this works
-        window.setTitle(`${path.parse(filePath).base} - Log reader`);
+        window.setTitle(`${path.parse(filePath).base} - Peruse`);
         window.webContents.executeJavaScript(`document
               .querySelector('body').dispatchEvent(
               new CustomEvent('logFilePath', {
