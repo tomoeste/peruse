@@ -7,7 +7,7 @@
 
 .header {
   display: flex;
-  flex-direction: row;  
+  flex-direction: row;
   min-height: 1.6rem;
   max-height: 1.6rem;
   text-align: center;
@@ -30,8 +30,8 @@
   color: #c5c5c5;
   padding: 4px !important;
   -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
-  -moz-box-sizing: border-box;    /* Firefox, other Gecko */
-  box-sizing: border-box;         /* Opera/IE 8+ */
+  -moz-box-sizing: border-box; /* Firefox, other Gecko */
+  box-sizing: border-box; /* Opera/IE 8+ */
 }
 
 .searchInput::placeholder {
@@ -39,7 +39,7 @@
   padding: 4px;
 }
 
-*:focus{
+*:focus {
   outline: 1px solid cornflowerblue;
 }
 
@@ -48,7 +48,7 @@
   flex-direction: row;
   min-height: 1.4rem;
   max-height: 1.4rem;
-  justify-content: flex-start;  
+  justify-content: flex-start;
   font-size: 0.75rem;
   font-weight: 400;
   background-color: rgb(119, 119, 119);
@@ -86,12 +86,12 @@ code {
   padding: 1px 6px;
   background-color: rgb(61, 61, 61);
   border-radius: 4px;
-  border-bottom: 2px solid #575757;;
+  border-bottom: 2px solid #575757;
 }
 
 .commandLabel {
   color: #969696;
-  font-size: 0.9rem;;
+  font-size: 0.9rem;
   line-height: 0.9rem;
   font-weight: 500;
   position: absolute;
@@ -100,17 +100,55 @@ code {
   text-align: center;
 }
 
+.body {
+  display: flex;
+  flex-direction: row;
+  flex-grow: 1;
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  min-width: 50px;
+  max-width: 50px;
+  background-color: #3d3d3d;
+  color: #a0a0a0;
+  padding: 0;
+}
+
+.sidebarButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 50px;
+  max-height: 50px;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+}
+
+.sidebarButton.active {
+  border-left: 1px solid white;
+  color: white;
+}
+
+.sidebarButton > div {
+  display: flex;
+}
+
+.sidebarButton:hover {
+  color: white;
+}
+
 .container {
   padding: 0;
   margin: 0;
   text-align: left;
   display: flex;
   flex-direction: column;
-  flex-grow: 1;  
-  overflow: auto; 
+  flex-grow: 1;
+  overflow: hidden;
 }
-
-
 
 .container h2 {
   font-size: 5rem;
@@ -124,7 +162,8 @@ code {
   display: flex;
   flex-direction: row;
   flex-shrink: 0;
-  font-family:Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New;
+  font-family: Consolas, Monaco, Lucida Console, Liberation Mono,
+    DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New;
   padding: 0;
   margin: 0;
   /* border-bottom: 1px solid #3d3d3d; */
@@ -142,7 +181,7 @@ code {
   background-color: #3d3d3d;
 }
 
-.gutter {  
+.gutter {
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
@@ -211,4 +250,9 @@ code {
 
 .logTagMessage {
   display: flex;
+}
+
+.highlight {
+  background-color: rgb(105, 74, 38);
+  color: #e2e2e2;
 }

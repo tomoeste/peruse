@@ -1,12 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useEffect } from 'react';
 import { get } from 'lodash';
+import * as Highlighter from 'react-highlight-words';
 import styles from './Home.css';
 
 export default function LogLine(props: any) {
   const [loaded, setLoaded] = useState(false);
   const [logProperties, setLogProperties] = useState(null);
-  const { logLine, lineNumber } = props;
+  const { logLine, lineNumber, search } = props;
 
   useEffect(() => {
     try {
@@ -20,6 +21,8 @@ export default function LogLine(props: any) {
       setLoaded(true);
     }
   }, [logLine]);
+
+  const searchWords = search && search.length > 0 ? search.split(' ') : [];
 
   return (
     <>
@@ -36,17 +39,37 @@ export default function LogLine(props: any) {
         {logProperties && (
           <div className={styles.logTag}>
             <div className={styles.logTagTime}>
-              {get(logProperties, `time`)}
+              <Highlighter
+                highlightClassName={styles.highlight}
+                searchWords={searchWords}
+                textToHighlight={get(logProperties, `time`)}
+              />
             </div>
             <div className={styles.logTagLevel}>
-              {get(logProperties, `level`)}
+              <Highlighter
+                highlightClassName={styles.highlight}
+                searchWords={searchWords}
+                textToHighlight={get(logProperties, `level`)}
+              />
             </div>
             <div className={styles.logTagMessage}>
-              {get(logProperties, `message`)}
+              <Highlighter
+                highlightClassName={styles.highlight}
+                searchWords={searchWords}
+                textToHighlight={get(logProperties, `message`)}
+              />
             </div>
           </div>
         )}
-        {!logProperties && loaded && <span>{logLine}</span>}
+        {!logProperties && loaded && (
+          <span>
+            <Highlighter
+              highlightClassName={styles.highlight}
+              searchWords={searchWords}
+              textToHighlight={logLine}
+            />
+          </span>
+        )}
       </div>
     </>
   );

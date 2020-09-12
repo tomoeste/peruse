@@ -4,6 +4,7 @@ import {
   shell,
   BrowserWindow,
   MenuItemConstructorOptions,
+  dialog,
 } from 'electron';
 import { openLogFileDialog } from './features/logReader/logReader';
 
@@ -199,13 +200,13 @@ export default class MenuBuilder {
         label: '&File',
         submenu: [
           {
-            label: '&Open',
+            label: '&Open file...',
             accelerator: 'Ctrl+O',
             click: () => {
               openLogFileDialog(this.mainWindow);
             },
           },
-          {
+          /*           {
             label: 'Open Recent',
             role: 'recentdocuments',
             submenu: [
@@ -214,10 +215,13 @@ export default class MenuBuilder {
                 role: 'clearrecentdocuments',
               },
             ],
+          }, */
+          {
+            type: 'separator',
           },
           {
-            label: '&Close',
-            accelerator: 'Ctrl+W',
+            label: '&Exit',
+            accelerator: 'Ctrl+Q',
             click: () => {
               this.mainWindow.close();
             },
@@ -232,18 +236,32 @@ export default class MenuBuilder {
             ? [
                 {
                   label: '&Reload',
-                  accelerator: 'Ctrl+R',
+                  accelerator: 'R',
                   click: () => {
-                    this.mainWindow.webContents.reload();
+                    this.mainWindow.webContents.executeJavaScript(`document
+                    .querySelector('body').dispatchEvent(
+                    new CustomEvent('reloadLogFile')
+                  );`);
                   },
                 },
                 {
-                  label: 'Toggle &Full Screen',
-                  accelerator: 'F11',
+                  label: '&Follow file',
+                  accelerator: 'F',
                   click: () => {
-                    this.mainWindow.setFullScreen(
-                      !this.mainWindow.isFullScreen()
-                    );
+                    this.mainWindow.webContents.executeJavaScript(`document
+                    .querySelector('body').dispatchEvent(
+                    new CustomEvent('toggleFollowFile')
+                  );`);
+                  },
+                },
+                {
+                  type: 'separator',
+                },
+                {
+                  label: '&Reload window',
+                  accelerator: 'W',
+                  click: () => {
+                    this.mainWindow.webContents.reload();
                   },
                 },
                 {
@@ -256,43 +274,55 @@ export default class MenuBuilder {
               ]
             : [
                 {
-                  label: 'Toggle &Full Screen',
-                  accelerator: 'F11',
+                  label: '&Reload',
+                  accelerator: 'R',
                   click: () => {
-                    this.mainWindow.setFullScreen(
-                      !this.mainWindow.isFullScreen()
-                    );
+                    this.mainWindow.webContents.executeJavaScript(`document
+                  .querySelector('body').dispatchEvent(
+                  new CustomEvent('reloadLogFile')
+                );`);
+                  },
+                },
+                {
+                  label: '&Follow file',
+                  accelerator: 'F',
+                  click: () => {
+                    this.mainWindow.webContents.executeJavaScript(`document
+                  .querySelector('body').dispatchEvent(
+                  new CustomEvent('toggleFollowFile')
+                );`);
                   },
                 },
               ],
       },
       {
-        label: 'Help',
+        label: '&Help',
         submenu: [
           {
-            label: 'Learn More',
+            label: '&Learn More',
             click() {
-              shell.openExternal('https://electronjs.org');
+              shell.openExternal('https://github.com/tomoeste/peruse#readme');
             },
           },
           {
-            label: 'Documentation',
+            label: '&Documentation',
             click() {
-              shell.openExternal(
-                'https://github.com/electron/electron/tree/master/docs#readme'
-              );
+              shell.openExternal('https://tom-oeste.gitbook.io/peruse');
             },
           },
           {
-            label: 'Community Discussions',
-            click() {
-              shell.openExternal('https://www.electronjs.org/community');
-            },
+            type: 'separator',
           },
           {
-            label: 'Search Issues',
-            click() {
-              shell.openExternal('https://github.com/electron/electron/issues');
+            label: '&About',
+            click: () => {
+              dialog.showMessageBox(this.mainWindow, {
+                title: 'Peruse',
+                type: 'info',
+                message: 'Peruse',
+                detail: `Version: ${app.getVersion()}\nElectron: ${process.versions.electron.toString()}\nChrome: ${process.versions.chrome.toString()}\nNode.js: ${process.versions.node.toString()}`,
+                buttons: [],
+              });
             },
           },
         ],
