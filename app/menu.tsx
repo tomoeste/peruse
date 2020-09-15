@@ -56,17 +56,15 @@ export default class MenuBuilder {
 
   buildDarwinTemplate(): MenuItemConstructorOptions[] {
     const subMenuAbout: DarwinMenuItemConstructorOptions = {
-      label: 'Electron',
+      label: 'Peruse',
       submenu: [
         {
-          label: 'About ElectronReact',
+          label: 'About Peruse',
           selector: 'orderFrontStandardAboutPanel:',
         },
         { type: 'separator' },
-        { label: 'Services', submenu: [] },
-        { type: 'separator' },
         {
-          label: 'Hide ElectronReact',
+          label: 'Hide Peruse',
           accelerator: 'Command+H',
           selector: 'hide:',
         },
@@ -86,19 +84,35 @@ export default class MenuBuilder {
         },
       ],
     };
-    const subMenuEdit: DarwinMenuItemConstructorOptions = {
-      label: 'Edit',
+    const subMenuFile: DarwinMenuItemConstructorOptions = {
+      label: '&File',
       submenu: [
-        { label: 'Undo', accelerator: 'Command+Z', selector: 'undo:' },
-        { label: 'Redo', accelerator: 'Shift+Command+Z', selector: 'redo:' },
-        { type: 'separator' },
-        { label: 'Cut', accelerator: 'Command+X', selector: 'cut:' },
-        { label: 'Copy', accelerator: 'Command+C', selector: 'copy:' },
-        { label: 'Paste', accelerator: 'Command+V', selector: 'paste:' },
         {
-          label: 'Select All',
-          accelerator: 'Command+A',
-          selector: 'selectAll:',
+          label: '&Open file...',
+          accelerator: 'Command+O',
+          click: () => {
+            openLogFileDialog(this.mainWindow);
+          },
+        },
+        /*           {
+            label: 'Open Recent',
+            role: 'recentdocuments',
+            submenu: [
+              {
+                label: 'Clear Recent',
+                role: 'clearrecentdocuments',
+              },
+            ],
+          }, */
+        {
+          type: 'separator',
+        },
+        {
+          label: '&Exit',
+          accelerator: 'Command+W',
+          click: () => {
+            this.mainWindow.close();
+          },
         },
       ],
     };
@@ -106,17 +120,33 @@ export default class MenuBuilder {
       label: 'View',
       submenu: [
         {
-          label: 'Reload',
-          accelerator: 'Command+R',
+          label: '&Reload',
+          accelerator: 'R',
           click: () => {
-            this.mainWindow.webContents.reload();
+            this.mainWindow.webContents.executeJavaScript(`document
+            .querySelector('body').dispatchEvent(
+            new CustomEvent('reloadLogFile')
+          );`);
           },
         },
         {
-          label: 'Toggle Full Screen',
-          accelerator: 'Ctrl+Command+F',
+          label: '&Follow file',
+          accelerator: 'F',
           click: () => {
-            this.mainWindow.setFullScreen(!this.mainWindow.isFullScreen());
+            this.mainWindow.webContents.executeJavaScript(`document
+            .querySelector('body').dispatchEvent(
+            new CustomEvent('toggleFollowFile')
+          );`);
+          },
+        },
+        {
+          type: 'separator',
+        },
+        {
+          label: '&Reload window',
+          accelerator: 'W',
+          click: () => {
+            this.mainWindow.webContents.reload();
           },
         },
         {
@@ -132,10 +162,23 @@ export default class MenuBuilder {
       label: 'View',
       submenu: [
         {
-          label: 'Toggle Full Screen',
-          accelerator: 'Ctrl+Command+F',
+          label: '&Reload',
+          accelerator: 'R',
           click: () => {
-            this.mainWindow.setFullScreen(!this.mainWindow.isFullScreen());
+            this.mainWindow.webContents.executeJavaScript(`document
+            .querySelector('body').dispatchEvent(
+            new CustomEvent('reloadLogFile')
+          );`);
+          },
+        },
+        {
+          label: '&Follow file',
+          accelerator: 'F',
+          click: () => {
+            this.mainWindow.webContents.executeJavaScript(`document
+            .querySelector('body').dispatchEvent(
+            new CustomEvent('toggleFollowFile')
+          );`);
           },
         },
       ],
@@ -154,32 +197,18 @@ export default class MenuBuilder {
       ],
     };
     const subMenuHelp: MenuItemConstructorOptions = {
-      label: 'Help',
+      label: '&Help',
       submenu: [
         {
-          label: 'Learn More',
+          label: '&Learn More',
           click() {
-            shell.openExternal('https://electronjs.org');
+            shell.openExternal('https://github.com/tomoeste/peruse#readme');
           },
         },
         {
-          label: 'Documentation',
+          label: '&Documentation',
           click() {
-            shell.openExternal(
-              'https://github.com/electron/electron/tree/master/docs#readme'
-            );
-          },
-        },
-        {
-          label: 'Community Discussions',
-          click() {
-            shell.openExternal('https://www.electronjs.org/community');
-          },
-        },
-        {
-          label: 'Search Issues',
-          click() {
-            shell.openExternal('https://github.com/electron/electron/issues');
+            shell.openExternal('https://tom-oeste.gitbook.io/peruse');
           },
         },
       ],
@@ -191,7 +220,7 @@ export default class MenuBuilder {
         ? subMenuViewDev
         : subMenuViewProd;
 
-    return [subMenuAbout, subMenuEdit, subMenuView, subMenuWindow, subMenuHelp];
+    return [subMenuAbout, subMenuFile, subMenuView, subMenuWindow, subMenuHelp];
   }
 
   buildDefaultTemplate() {
