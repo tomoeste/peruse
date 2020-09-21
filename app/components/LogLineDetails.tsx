@@ -13,6 +13,7 @@ export const LogLineDetails = (props: any) => {
   const logLines = useSelector(selectLogLines);
   const selectedLine = useSelector(selectSelectedLine);
   const [promptToLoad, setPromptToLoad] = useState(false);
+  const [loaded, setLoaded] = useState(false);
   const [detailLine, setDetailLine] = useState<Line | null>(null);
 
   // Fix issue where prompt is shown when no line is selected
@@ -26,7 +27,8 @@ export const LogLineDetails = (props: any) => {
       }
     }
     return () => {
-      setPromptToLoad(true);
+      console.log(`selectedLine Effect exit`);
+      setLoaded(false);
     };
   }, [logLines, selectedLine]);
 
@@ -36,6 +38,7 @@ export const LogLineDetails = (props: any) => {
       : 0;
     const maxLineLength = settings.getSync('maxLineLength') || 2000;
     setPromptToLoad(lineLength > maxLineLength);
+    setLoaded(true);
   }, [detailLine]);
 
   const isJson = (value: string): boolean => {
@@ -82,19 +85,20 @@ export const LogLineDetails = (props: any) => {
           </button>
         </div>
       )}
-      {!promptToLoad && detailLine && lineIsObject(detailLine) && (
+      {!promptToLoad && loaded && detailLine && lineIsObject(detailLine) && (
         <JsonRenderer json={detailLine.logLine} />
       )}
-      {!promptToLoad && detailLine && !lineIsObject(detailLine) && (
+      {!promptToLoad && loaded && detailLine && !lineIsObject(detailLine) && (
         <pre className={styles.detailContent}>
           {formatPlainTextLogLine(detailLine?.logLine)}
         </pre>
       )}
-      {!promptToLoad && detailLine?.logLine?.length === 0 && (
-        <div className={styles.detailContent} style={{ textAlign: `center` }}>
-          No detail to show.
-        </div>
-      )}
+      {!promptToLoad &&
+        (!detailLine?.logLine || detailLine?.logLine?.length === 0) && (
+          <div className={styles.detailContent} style={{ textAlign: `center` }}>
+            No detail to show.
+          </div>
+        )}
     </div>
   );
 };
