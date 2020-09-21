@@ -52,8 +52,9 @@
   font-size: 0.75rem;
   font-weight: 400;
   background-color: rgb(119, 119, 119);
-  color: #ffffff;
+  color: #fff;
   padding: 0 8px;
+  z-index: 1;
 }
 
 .footerSpacer {
@@ -106,9 +107,175 @@ code {
   flex-grow: 1;
 }
 
+.split {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.splitPanel {
+  display: flex;
+}
+
+.detailPane {
+  padding: 0;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.detailHeader {
+  margin: 0;
+  padding: 5px 0 10px 10px;
+  font-size: 0.8rem;
+  letter-spacing: 0.02rem;
+  color: lightgray;
+}
+
+.detailContent {
+  white-space: pre-wrap;
+  padding: 0 20px;
+  font-size: 1rem;
+  color: lightgray;
+  line-height: 200%;
+}
+
+.form {
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  color: rgb(224, 224, 224);
+  padding: 10px 20px;
+}
+
+.form label {
+  display: flex;
+  font-size: 0.8rem;
+  padding: 4px 0;
+  font-weight: 600;
+}
+
+.form input {
+  display: flex;
+  margin: 4px 0;
+  padding: 6px;
+  background-color: #303030;
+  color: rgb(209, 209, 209);
+  font-weight: 200;
+  border: none;
+}
+
+.formField {
+  margin-bottom: 20px;
+}
+
+.textXs {
+  font-size: 0.8rem;
+  color: rgb(194, 194, 194);
+  padding-bottom: 4px;
+}
+
+.messageContainer {
+  padding: 10px;
+  text-align: center;
+}
+
+.message {
+  text-align: center;
+  font-size: 0.9rem;
+  color: #d4d4d4;
+}
+
+.button {
+  margin-top: 20px;
+  font-size: 1rem;
+  border: none;
+  border-bottom: 1px solid #575757;
+  border-radius: 4px;
+  background-color: #3d3d3d;
+  color: white;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-variant-caps: all-small-caps;
+}
+
+.button:hover {
+  background-color: #414141;
+}
+
+.logEntry {
+  color: #e2e2e2;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 100%;
+  padding: 0 12px;
+  margin: 0;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.logTag {
+  display: flex;
+  flex-direction: row;
+}
+
+.logTag > * {
+  margin-right: 16px;
+}
+
+.logTagTime {
+  display: flex;
+  color: #969696;
+}
+
+.logTagLevel {
+  display: flex;
+  min-width: 40px;
+}
+
+.logTagMessage {
+  display: flex;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+}
+
+.listLine {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  cursor: pointer;
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: lightgray;
+  padding: 4px 4px 4px 12px;
+}
+
+.listLine:hover {
+  background-color: #2e2e2e;
+}
+
+.listLine:hover * {
+  opacity: 1;
+}
+
+.listLineText {
+  display: flex;
+  flex-grow: 1;
+}
+
+.listLineButton {
+  display: flex;
+  opacity: 0;
+  cursor: pointer;
+}
+
 .sidebar {
   display: flex;
   flex-direction: column;
+  height: 100%;
   min-width: 50px;
   max-width: 50px;
   background-color: #3d3d3d;
@@ -140,6 +307,11 @@ code {
   color: white;
 }
 
+.sidebarButton:focus {
+  border: none !important;
+  border-left: 1px solid cornflowerblue !important;
+}
+
 .container {
   padding: 0;
   margin: 0;
@@ -161,16 +333,20 @@ code {
 .line {
   display: flex;
   flex-direction: row;
+  align-items: center;
   flex-shrink: 0;
   font-family: Consolas, Monaco, Lucida Console, Liberation Mono,
-    DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New;
+    DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, serif;
   padding: 0;
   margin: 0;
+
   /* border-bottom: 1px solid #3d3d3d; */
   cursor: pointer;
   font-size: 0.9rem;
-  line-height: 1.2rem;
+
+  /* line-height: 1.2rem; */
   min-height: 0.9rem;
+  overflow-x: hidden;
 }
 
 .line.selected {
@@ -184,8 +360,10 @@ code {
 .gutter {
   display: flex;
   flex-direction: row;
+  align-items: center;
+  height: 100%;
   justify-content: flex-end;
-  padding: 10px 12px;
+  padding: 0 12px;
   margin: 0;
   min-width: 30px;
   max-width: 30px;
@@ -214,42 +392,7 @@ code {
 }
 
 .CRITICAL {
-  border-color: #000000 !important;
-}
-
-.logEntry {
-  color: #e2e2e2;
-  display: flex;
-  padding: 10px 12px;
-  margin: 0;
-  display: block;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  width: calc(100vw - 40px);
-  overflow: hidden;
-}
-
-.logTag {
-  display: flex;
-  flex-direction: row;
-}
-
-.logTag > * {
-  margin-right: 16px;
-}
-
-.logTagTime {
-  display: flex;
-  color: #969696;
-}
-
-.logTagLevel {
-  display: flex;
-  min-width: 40px;
-}
-
-.logTagMessage {
-  display: flex;
+  border-color: #000 !important;
 }
 
 .highlight {

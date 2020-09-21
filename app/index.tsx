@@ -1,8 +1,11 @@
 import React, { Fragment } from 'react';
 import { render } from 'react-dom';
+import log from 'loglevel';
 import { AppContainer as ReactHotAppContainer } from 'react-hot-loader';
 import { history, configuredStore } from './store';
 import './app.global.css';
+
+log.info(`📒 Ready to love some log files with Peruse!`);
 
 const store = configuredStore();
 

@@ -1,5 +1,10 @@
 import { app, dialog, OpenDialogOptions, BrowserWindow } from 'electron';
-import * as path from 'path';
+import * as settings from 'electron-settings';
+
+export interface Line {
+  lineNumber: number;
+  logLine: string;
+}
 
 export const openLogFileDialog = (window: BrowserWindow) => {
   const options: OpenDialogOptions = {
@@ -13,10 +18,10 @@ export const openLogFileDialog = (window: BrowserWindow) => {
     .showOpenDialog(window, options)
     .then((result) => {
       const re = /\\/gi;
-      const filePath = result.filePaths[0]?.replace(re, '\\\\');
+      const filePath = result.filePaths[0]?.replace(re, '\\');
       if (result.filePaths.length > 0) {
         app.addRecentDocument(filePath); // Verify this works
-        window.setTitle(`${path.parse(filePath).base} - Peruse`);
+        settings.set('openFilePath', filePath);
         window.webContents.executeJavaScript(`document
               .querySelector('body').dispatchEvent(
               new CustomEvent('logFilePath', {

@@ -3,10 +3,10 @@ import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import styles from './logReader.css';
 import routes from '../../constants/routes.json';
-import { selectLog } from './logReaderSlice';
+import { selectLogPath } from './logReaderSlice';
 
 export default function Counter() {
-  const value = useSelector(selectLog);
+  const value = useSelector(selectLogPath);
   return (
     <div>
       <div className={styles.backButton} data-tid="backButton">
