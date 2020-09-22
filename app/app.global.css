@@ -156,6 +156,7 @@ input[type='number'] {
 .tooltip::before,
 .tooltip::after {
   position: absolute;
+  z-index: 900;
   visibility: hidden;
   -ms-filter: 'progid:DXImageTransform.Microsoft.Alpha(Opacity=0)';
   filter: progid:dximagetransform.microsoft.alpha(opacity=0);

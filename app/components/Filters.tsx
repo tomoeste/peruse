@@ -17,15 +17,57 @@ export const Filters = () => {
 
   return (
     <div className={styles.detailPane}>
-      <div className={styles.detailHeader}>FILTER</div>
+      <div className={styles.detailHeader}>
+        FILTER
+        <div className={styles.buttonTray}>
+          <div className={`${styles.button} tooltip-left`} title="New">
+            <svg
+              height="26"
+              viewBox="0 0 20 20"
+              width="26"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <g
+                fill="none"
+                fillRule="evenodd"
+                stroke="lightgrey"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="m5.029 10.429h10" />
+                <path d="m10.029 15.429v-10.001" />
+              </g>
+            </svg>
+          </div>
+        </div>
+      </div>
       <SplitPane split="horizontal" minSize={220} style={{ marginTop: `30px` }}>
         <div className={styles.form}>
-          <label>Search</label>
+          <label>Search*</label>
+          <input
+            onKeyDown={(event) => {
+              event.stopPropagation();
+              event.preventDefault();
+            }}
+          />
+          <label>Description</label>
           <input />
-          <label>Background</label>
-          <input />
-          <label>Color</label>
-          <input />
+          <div className={styles.inlineFieldGroup}>
+            <button
+              className={`${styles.buttonSmall} ${styles.buttonGrey}`}
+              type="button"
+              title="Reset fields"
+            >
+              Reset
+            </button>
+            <button
+              className={styles.buttonSmall}
+              type="button"
+              title="Apply filter"
+            >
+              Apply
+            </button>
+          </div>
         </div>
         <div className={styles.list}>
           {filters.length === 0 && (
@@ -33,14 +75,18 @@ export const Filters = () => {
           )}
           {filters.map((filter: Filter, index: number) => {
             return (
-              // eslint-disable-next-line react/no-array-index-key
-              <div key={index} className={styles.listLine}>
+              <div
+                // eslint-disable-next-line react/no-array-index-key
+                key={index}
+                className={styles.listLine}
+                title="Select to edit filter"
+              >
                 <div className={styles.listLineText}>
                   {`🔎 ${filter.search}`}
                 </div>
                 <span
                   className={`${styles.listLineButton} tooltip-left`}
-                  data-tooltip="Remove"
+                  title="Remove"
                   role="button"
                   tabIndex={0}
                   onClick={() => {

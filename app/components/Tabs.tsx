@@ -33,13 +33,16 @@ export const Tabs = () => {
               onKeyPress={() => {}}
               role="button"
               tabIndex={0}
+              title={value.logPath}
             >
               {value?.title}
               <span style={{ display: `flex`, flexGrow: 1 }} />
               <span
                 className={styles.tabCloseButton}
-                onClick={() => {
+                title="Close"
+                onClick={(event) => {
                   dispatch(removeTab(index));
+                  event.stopPropagation();
                 }}
                 onKeyPress={() => {}}
                 role="button"

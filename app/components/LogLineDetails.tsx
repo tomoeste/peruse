@@ -77,7 +77,7 @@ export const LogLineDetails = () => {
           </span>
           <button
             type="button"
-            className={styles.button}
+            className={styles.buttonSmall}
             onClick={() => {
               setPromptToLoad(false);
             }}

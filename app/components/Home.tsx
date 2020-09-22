@@ -1,6 +1,9 @@
 import React, { useEffect } from 'react';
+import { debounce } from 'lodash';
 import * as path from 'path';
 import * as settings from 'electron-settings';
+import * as fs from 'fs';
+import * as chokidar from 'chokidar';
 import SplitPane from 'react-split-pane';
 import { useSelector, useDispatch } from 'react-redux';
 import styles from './Home.css';
@@ -13,19 +16,23 @@ import {
   selectTabs,
   addTab,
   Tab as TabType,
+  setActiveTab,
+  updateTab,
+  selectActiveTab,
 } from '../features/logReader/logReaderSlice';
 import { Windows } from './Windows';
 import { Filters } from './Filters';
 import { Settings } from './Settings';
 import { Tabs } from './Tabs';
 
-// TODO: Crash closing last tab, finish implementing filters
+// TODO: finish implementing filters, log templates, sort out follow vs. live mode
 // Fix selection rerenders, perfomance check, test install w/ file extensions
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default function Home(): JSX.Element {
   const tabs = useSelector(selectTabs);
   const dispatch = useDispatch();
   const activePanel = useSelector(selectActivePanel);
+  const activeTab = useSelector(selectActiveTab);
 
   useEffect(() => {
     const openFile = settings.getSync('openFilePath');
@@ -36,22 +43,132 @@ export default function Home(): JSX.Element {
   }, []);
 
   useEffect(() => {
-    const handleLogFilePath = ((event: CustomEvent) => {
+    const setLiveMode = (mode: boolean) => {
+      dispatch(updateTab({ logPath: activeTab?.logPath, liveMode: mode }));
+    };
+
+    const setFollowMode = (mode: boolean) => {
+      dispatch(updateTab({ logPath: activeTab?.logPath, followMode: mode }));
+    };
+
+    const readLog = (pathToRead: string | undefined) => {
+      if (pathToRead && pathToRead.length > 0) {
+        const readable = fs.createReadStream(pathToRead);
+        const chunks: string[] = [];
+
+        readable.on('data', (chunk) => {
+          chunks.push(chunk);
+        });
+
+        readable.on('end', () => {
+          const fileContent = chunks.join('');
+          const newContent = fileContent
+            .split('\n')
+            .map((value: string, index: number) => {
+              return { lineNumber: index + 1, logLine: value };
+            }); // .reverse();
+          dispatch(
+            updateTab({ logPath: activeTab?.logPath, content: newContent })
+          );
+          // eslint-disable-next-line no-console
+          console.log(`readLog`, path, newContent.length);
+          readable.destroy();
+        });
+      }
+    };
+
+    const handleReloadLogFile = () => {
+      readLog(activeTab?.logPath);
+    };
+
+    const handleToggleFollowFile = () => {
+      if (activeTab?.followMode) {
+        setFollowMode(false);
+      } else {
+        setLiveMode(true);
+        setFollowMode(true);
+      }
+    };
+
+    const handleToggleLiveMode = () => {
+      if (activeTab?.liveMode) {
+        setLiveMode(false);
+        setFollowMode(false);
+      } else {
+        setLiveMode(true);
+      }
+    };
+
+    const addEventListeners = () => {
       // eslint-disable-next-line no-console
+      console.log(`addEventListeners`);
+      const elem = document?.querySelector('body');
+      elem?.addEventListener('reloadLogFile', handleReloadLogFile);
+      elem?.addEventListener('toggleFollowFile', handleToggleFollowFile);
+      elem?.addEventListener('toggleLiveMode', handleToggleLiveMode);
+    };
+
+    const removeEventListeners = () => {
+      // eslint-disable-next-line no-console
+      console.log(`removeEventListeners`);
+      const elem = document?.querySelector('body');
+      elem?.removeEventListener('reloadLogFile', handleReloadLogFile);
+      elem?.removeEventListener('toggleFollowFile', handleToggleFollowFile);
+      elem?.removeEventListener('toggleLiveMode', handleToggleLiveMode);
+    };
+
+    addEventListeners();
+    const readDebounced = debounce(readLog, 200);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let watcher: any;
+
+    if (activeTab?.logPath && activeTab?.logPath.length > 0) {
+      readLog(activeTab.logPath);
+      // Watch log file for changes
+      watcher = chokidar.watch(activeTab.logPath, {
+        persistent: true,
+      });
+      if (activeTab?.liveMode) {
+        watcher.on('change', (watchPath: string) => {
+          readDebounced(watchPath);
+        });
+      }
+    }
+    if (!activeTab?.liveMode && watcher) watcher.close();
+    return () => {
+      removeEventListeners();
+      if (watcher) watcher.close();
+    };
+  }, [
+    dispatch,
+    activeTab?.logPath,
+    activeTab?.liveMode,
+    activeTab?.followMode,
+  ]);
+
+  useEffect(() => {
+    const handleLogFilePath = ((event: CustomEvent) => {
       const pathFromEvent = event.detail.replace(/\\+/g, '\\');
       const fileName = path.parse(pathFromEvent).base;
-      const newTab: TabType = {
-        title: fileName,
-        logPath: pathFromEvent,
-        logLines: [],
-        content: [],
-        liveMode: false,
-        followMode: false,
-        selectedLine: 0,
-        search: '',
-      };
-      document.title = `${fileName} - Peruse`;
-      dispatch(addTab(newTab));
+      document.title = `${fileName} - Peruse`; // Look to Helmet for solution
+      const existingTab = tabs.findIndex((value: TabType) => {
+        return value.logPath === pathFromEvent;
+      });
+      if (existingTab >= 0) {
+        dispatch(setActiveTab(existingTab));
+      } else {
+        const newTab: TabType = {
+          title: fileName,
+          logPath: pathFromEvent,
+          logLines: [],
+          content: [],
+          liveMode: false,
+          followMode: false,
+          selectedLine: 0,
+          search: '',
+        };
+        dispatch(addTab(newTab));
+      }
     }) as EventListener;
 
     const addEventListeners = () => {
@@ -72,7 +189,7 @@ export default function Home(): JSX.Element {
     return () => {
       removeEventListeners();
     };
-  }, [dispatch]);
+  }, [dispatch, tabs]);
 
   return (
     <div className={styles.wrapper}>
@@ -85,11 +202,10 @@ export default function Home(): JSX.Element {
         >
           <Sidebar />
           <div className={styles.container} data-tid="container">
-            {tabs.length === 0 && <NoOpenLog />}
             <SplitPane
               split="vertical"
               minSize={200}
-              defaultSize={activePanel >= 0 ? `33%` : `100%`} // Implement more robust panel selection
+              defaultSize={activePanel >= 0 ? 400 : `100%`} // Implement more robust panel selection
               primary="first"
               allowResize
               size={activePanel >= 0 ? undefined : `100%`}
@@ -98,7 +214,8 @@ export default function Home(): JSX.Element {
               {activePanel === 1 && <Windows />}
               {activePanel === 2 && <Filters />}
               {activePanel === 99 && <Settings />}
-              <Tabs />
+              {tabs.length > 0 && <Tabs />}
+              {tabs.length === 0 && <NoOpenLog />}
             </SplitPane>
           </div>
         </SplitPane>

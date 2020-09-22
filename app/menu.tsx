@@ -121,7 +121,7 @@ export default class MenuBuilder {
       submenu: [
         {
           label: '&Reload',
-          accelerator: 'R',
+          accelerator: 'Command+R',
           click: () => {
             this.mainWindow.webContents.executeJavaScript(`document
             .querySelector('body').dispatchEvent(
@@ -130,8 +130,18 @@ export default class MenuBuilder {
           },
         },
         {
+          label: '&Live mode',
+          accelerator: 'Command+L',
+          click: () => {
+            this.mainWindow.webContents.executeJavaScript(`document
+            .querySelector('body').dispatchEvent(
+            new CustomEvent('toggleLiveMode')
+          );`);
+          },
+        },
+        {
           label: '&Follow file',
-          accelerator: 'F',
+          accelerator: 'Command+F',
           click: () => {
             this.mainWindow.webContents.executeJavaScript(`document
             .querySelector('body').dispatchEvent(
@@ -144,7 +154,7 @@ export default class MenuBuilder {
         },
         {
           label: '&Reload window',
-          accelerator: 'W',
+          accelerator: 'Alt+Command+R',
           click: () => {
             this.mainWindow.webContents.reload();
           },
@@ -163,7 +173,7 @@ export default class MenuBuilder {
       submenu: [
         {
           label: '&Reload',
-          accelerator: 'R',
+          accelerator: 'Command+R',
           click: () => {
             this.mainWindow.webContents.executeJavaScript(`document
             .querySelector('body').dispatchEvent(
@@ -172,8 +182,18 @@ export default class MenuBuilder {
           },
         },
         {
+          label: '&Live mode',
+          accelerator: 'Command+L',
+          click: () => {
+            this.mainWindow.webContents.executeJavaScript(`document
+            .querySelector('body').dispatchEvent(
+            new CustomEvent('toggleLiveMode')
+          );`);
+          },
+        },
+        {
           label: '&Follow file',
-          accelerator: 'F',
+          accelerator: 'Command+F',
           click: () => {
             this.mainWindow.webContents.executeJavaScript(`document
             .querySelector('body').dispatchEvent(
@@ -264,8 +284,8 @@ export default class MenuBuilder {
           process.env.DEBUG_PROD === 'true'
             ? [
                 {
-                  label: '&Reload',
-                  accelerator: 'R',
+                  label: '&Refresh',
+                  accelerator: 'Ctrl+R',
                   click: () => {
                     this.mainWindow.webContents.executeJavaScript(`document
                     .querySelector('body').dispatchEvent(
@@ -274,8 +294,18 @@ export default class MenuBuilder {
                   },
                 },
                 {
+                  label: '&Live mode',
+                  accelerator: 'Ctrl+L',
+                  click: () => {
+                    this.mainWindow.webContents.executeJavaScript(`document
+                    .querySelector('body').dispatchEvent(
+                    new CustomEvent('toggleLiveMode')
+                  );`);
+                  },
+                },
+                {
                   label: '&Follow file',
-                  accelerator: 'F',
+                  accelerator: 'Ctrl+F',
                   click: () => {
                     this.mainWindow.webContents.executeJavaScript(`document
                     .querySelector('body').dispatchEvent(
@@ -288,7 +318,7 @@ export default class MenuBuilder {
                 },
                 {
                   label: '&Reload window',
-                  accelerator: 'W',
+                  accelerator: 'Ctrl+W',
                   click: () => {
                     this.mainWindow.webContents.reload();
                   },
@@ -303,8 +333,8 @@ export default class MenuBuilder {
               ]
             : [
                 {
-                  label: '&Reload',
-                  accelerator: 'R',
+                  label: '&Refresh',
+                  accelerator: 'Ctrl+R',
                   click: () => {
                     this.mainWindow.webContents.executeJavaScript(`document
                   .querySelector('body').dispatchEvent(
@@ -313,8 +343,18 @@ export default class MenuBuilder {
                   },
                 },
                 {
+                  label: '&Live mode',
+                  accelerator: 'Ctrl+L',
+                  click: () => {
+                    this.mainWindow.webContents.executeJavaScript(`document
+                    .querySelector('body').dispatchEvent(
+                    new CustomEvent('toggleLiveMode')
+                  );`);
+                  },
+                },
+                {
                   label: '&Follow file',
-                  accelerator: 'F',
+                  accelerator: 'Ctrl+F',
                   click: () => {
                     this.mainWindow.webContents.executeJavaScript(`document
                   .querySelector('body').dispatchEvent(

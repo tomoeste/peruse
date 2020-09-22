@@ -47,7 +47,11 @@ const logReaderSlice = createSlice({
       state.tabs = state.tabs.filter(
         (value: Tab, index: number) => index !== action.payload
       );
-      state.activeTab -= 1;
+      if (state.activeTab === action.payload) {
+        if (state.activeTab > state.tabs.length - 1) state.activeTab -= 1;
+      } else if (state.activeTab > action.payload) {
+        state.activeTab -= 1;
+      }
     },
     updateTab: (state, action: PayloadAction<Tab>) => {
       const updatedTabs = state.tabs.map((value: Tab) => {

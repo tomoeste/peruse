@@ -24,7 +24,7 @@ export const LogList = () => {
   return (
     <FixedSizeList
       ref={listRef}
-      height={height - 20}
+      height={height - 70}
       itemData={get(activeTab, `content`, [])}
       width="100%"
       itemCount={get(activeTab, `content.length`, 0)}
