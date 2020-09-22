@@ -17,15 +17,15 @@ export const openLogFileDialog = (window: BrowserWindow) => {
   dialog
     .showOpenDialog(window, options)
     .then((result) => {
-      const re = /\\/gi;
-      const filePath = result.filePaths[0]?.replace(re, '\\');
+      const re = /\\+/gi;
+      const filePath = result.filePaths[0];
       if (result.filePaths.length > 0) {
         app.addRecentDocument(filePath); // Verify this works
         settings.set('openFilePath', filePath);
         window.webContents.executeJavaScript(`document
               .querySelector('body').dispatchEvent(
               new CustomEvent('logFilePath', {
-                detail: '${filePath}',
+                detail: '${filePath.replace(re, '\\\\')}',
               })
             );`);
       }

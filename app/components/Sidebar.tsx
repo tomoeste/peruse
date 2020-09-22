@@ -6,7 +6,7 @@ import {
 } from '../features/logReader/logReaderSlice';
 import styles from './Home.css';
 
-export const Sidebar = (props: any) => {
+export const Sidebar = () => {
   const activePanel = useSelector(selectActivePanel);
   const dispatch = useDispatch();
 
@@ -14,7 +14,7 @@ export const Sidebar = (props: any) => {
     <div className={styles.sidebar}>
       <div
         id="sidebarButton-detail"
-        data-tooltip="Detail"
+        title="Detail"
         data-panelId={0}
         className={`${styles.sidebarButton} ${
           activePanel === 0 ? styles.active : ``
@@ -49,7 +49,7 @@ export const Sidebar = (props: any) => {
       </div>
       <div
         id="sidebarButton-windows"
-        data-tooltip="Windows"
+        title="Windows"
         data-panelId={1}
         className={`${styles.sidebarButton} ${
           activePanel === 1 ? styles.active : ``
@@ -85,12 +85,12 @@ export const Sidebar = (props: any) => {
       </div>
       <div
         id="sidebarButton-filters"
-        data-tooltip="Filters"
+        title="Filters"
         data-panelId={2}
         className={`${styles.sidebarButton} ${
           activePanel === 2 ? styles.active : ``
         } tooltip-right`}
-        onClick={(event: any) => {
+        onClick={(event) => {
           dispatch(setActivePanel(activePanel === 2 ? -1 : 2));
           event.preventDefault();
         }}
@@ -119,7 +119,7 @@ export const Sidebar = (props: any) => {
       <div className={styles.footerSpacer} />
       <div
         id="sidebarButton-settings"
-        data-tooltip="Settings"
+        title="Settings"
         data-panelId={99}
         className={`${styles.sidebarButton} ${
           activePanel === 99 ? styles.active : ``

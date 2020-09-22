@@ -117,18 +117,129 @@ code {
   display: flex;
 }
 
+.tabContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.tabStrip {
+  display: flex;
+  flex-direction: row;
+  background-color: #303030;
+}
+
+.tabButton {
+  display: flex;
+  font-size: 0.9rem;
+  line-height: 1;
+  flex-direction: row;
+  padding: 8px 16px 12px 16px;
+  min-width: 40px;
+  cursor: pointer;
+  background-color: #383838;
+  border-right: 1px solid #2e2e2e;
+  color: #a0a0a0;
+}
+
+.tabButton.active {
+  background-color: #252525;
+  color: white;
+}
+
+.tabCloseButton {
+  display: flex;
+  align-self: flex-end;
+  margin-left: 14px;
+  opacity: 0;
+}
+
+.tabButton.active > .tabCloseButton,
+.tabButton:hover > .tabCloseButton {
+  opacity: 1;
+}
+
+.tab {
+  display: flex;
+  flex-direction: column;
+  padding: 8px;
+}
+
+.button {
+  margin-top: 20px;
+  font-size: 1rem;
+  border: none;
+  border-bottom: 1px solid #575757;
+  border-radius: 4px;
+  background-color: #3d3d3d;
+  color: white;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-variant-caps: all-small-caps;
+}
+
+.button:hover {
+  background-color: #414141;
+}
+
+.buttonSmall {
+  margin-top: 20px;
+  margin-right: 8px;
+  font-size: 0.8rem;
+  border: none;
+  border-bottom: 1px solid #354175;
+  border-radius: 2px;
+  background-color: #4559b1;
+  color: white;
+  padding: 6px 16px;
+  cursor: pointer;
+  font-variant-caps: all-small-caps;
+}
+
+.buttonSmall:hover {
+  background-color: #586cc5;
+}
+
+.buttonGrey {
+  border-bottom: 1px solid #3a3a3a;
+  background-color: #555;
+}
+
+.buttonGrey:hover {
+  background-color: #6b6b6b;
+}
+
 .detailPane {
   padding: 0;
   height: 100%;
   overflow-y: auto;
+  background-color: #2b2b2b;
 }
 
 .detailHeader {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
   margin: 0;
-  padding: 5px 0 10px 10px;
+  min-height: 26px;
+  max-height: 26px;
+  padding: 5px 10px 10px 10px;
   font-size: 0.8rem;
   letter-spacing: 0.02rem;
   color: lightgray;
+}
+
+.detailHeader .buttonTray {
+  display: flex;
+  flex-direction: row;
+  margin-left: auto;
+}
+
+.detailHeader .buttonTray .button {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  background-color: transparent;
+  border: none;
 }
 
 .detailContent {
@@ -164,6 +275,11 @@ code {
   border: none;
 }
 
+.inlineFieldGroup {
+  display: flex;
+  flex-direction: row;
+}
+
 .formField {
   margin-bottom: 20px;
 }
@@ -175,31 +291,18 @@ code {
 }
 
 .messageContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   padding: 10px;
   text-align: center;
 }
 
 .message {
+  display: flex;
   text-align: center;
   font-size: 0.9rem;
   color: #d4d4d4;
-}
-
-.button {
-  margin-top: 20px;
-  font-size: 1rem;
-  border: none;
-  border-bottom: 1px solid #575757;
-  border-radius: 4px;
-  background-color: #3d3d3d;
-  color: white;
-  padding: 8px 16px;
-  cursor: pointer;
-  font-variant-caps: all-small-caps;
-}
-
-.button:hover {
-  background-color: #414141;
 }
 
 .logEntry {
@@ -257,6 +360,10 @@ code {
   background-color: #2e2e2e;
 }
 
+.listLine.selected {
+  background-color: #3d3d3d;
+}
+
 .listLine:hover * {
   opacity: 1;
 }
@@ -270,6 +377,10 @@ code {
   display: flex;
   opacity: 0;
   cursor: pointer;
+}
+
+.listLineIcon {
+  display: flex;
 }
 
 .sidebar {
@@ -349,11 +460,11 @@ code {
   overflow-x: hidden;
 }
 
-.line.selected {
-  background-color: #3d3d3d;
+.line:hover {
+  background-color: #2e2e2e;
 }
 
-.line:hover {
+.line.selected {
   background-color: #3d3d3d;
 }
 

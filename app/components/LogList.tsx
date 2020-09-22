@@ -1,32 +1,36 @@
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { FixedSizeList } from 'react-window';
-import { selectLogLines } from '../features/logReader/logReaderSlice';
+import { get } from 'lodash';
+import { selectActiveTab } from '../features/logReader/logReaderSlice';
 import useWindowDimensions from '../hooks/useWindowDimensions';
 import { LogLine } from './LogLine';
 
-export const LogList = (props: any) => {
-  const logLines = useSelector(selectLogLines);
+export const LogList = () => {
+  const activeTab = useSelector(selectActiveTab);
   const listRef = React.createRef<FixedSizeList>();
-  const { height, width } = useWindowDimensions();
-  const { search, followMode, liveMode } = props;
+  const { height } = useWindowDimensions();
 
   useEffect(() => {
-    if (followMode && logLines && logLines.length > 0) {
-      listRef.current?.scrollToItem(logLines.length, 'end');
+    if (
+      activeTab?.followMode &&
+      activeTab?.content &&
+      activeTab?.content.length > 0
+    ) {
+      listRef.current?.scrollToItem(activeTab?.content.length, 'end');
     }
-  }, [listRef, logLines, followMode]);
+  }, [listRef, activeTab?.followMode, activeTab?.content]);
 
   return (
     <FixedSizeList
       ref={listRef}
-      height={height - 20}
-      itemData={logLines}
+      height={height - 70}
+      itemData={get(activeTab, `content`, [])}
       width="100%"
-      itemCount={logLines.length}
+      itemCount={get(activeTab, `content.length`, 0)}
       itemSize={30}
     >
-      {(itemProps: any) => <LogLine itemProps={itemProps} search={search} />}
+      {(itemProps: unknown) => <LogLine itemProps={itemProps} />}
     </FixedSizeList>
   );
 };
