@@ -10,7 +10,7 @@ import {
 } from '../features/logReader/logReaderSlice';
 import styles from './Home.css';
 
-export const Filters = (props: any) => {
+export const Filters = () => {
   const filters = useSelector(selectFilters);
   const dispatch = useDispatch();
   useEffect(() => {}, []);

@@ -235,7 +235,7 @@ export default class MenuBuilder {
               openLogFileDialog(this.mainWindow);
             },
           },
-          /*           {
+          {
             label: 'Open Recent',
             role: 'recentdocuments',
             submenu: [
@@ -244,7 +244,7 @@ export default class MenuBuilder {
                 role: 'clearrecentdocuments',
               },
             ],
-          }, */
+          },
           {
             type: 'separator',
           },

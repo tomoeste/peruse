@@ -6,7 +6,7 @@ import {
 } from '../features/logReader/logReaderSlice';
 import styles from './Home.css';
 
-export const Sidebar = (props: any) => {
+export const Sidebar = () => {
   const activePanel = useSelector(selectActivePanel);
   const dispatch = useDispatch();
 
@@ -90,7 +90,7 @@ export const Sidebar = (props: any) => {
         className={`${styles.sidebarButton} ${
           activePanel === 2 ? styles.active : ``
         } tooltip-right`}
-        onClick={(event: any) => {
+        onClick={(event) => {
           dispatch(setActivePanel(activePanel === 2 ? -1 : 2));
           event.preventDefault();
         }}

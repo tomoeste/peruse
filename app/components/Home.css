@@ -117,6 +117,53 @@ code {
   display: flex;
 }
 
+.tabContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.tabStrip {
+  display: flex;
+  flex-direction: row;
+  background-color: #303030;
+}
+
+.tabButton {
+  display: flex;
+  font-size: 0.9rem;
+  line-height: 1;
+  flex-direction: row;
+  padding: 8px 16px;
+  min-width: 40px;
+  cursor: pointer;
+  background-color: #383838;
+  border-right: 1px solid #2e2e2e;
+  color: #a0a0a0;
+}
+
+.tabButton.active {
+  background-color: #252525;
+  color: white;
+}
+
+.tabCloseButton {
+  display: flex;
+  align-self: flex-end;
+  margin-left: 14px;
+  opacity: 0;
+}
+
+.tabButton.active > .tabCloseButton,
+.tabButton:hover > .tabCloseButton {
+  opacity: 1;
+}
+
+.tab {
+  display: flex;
+  flex-direction: column;
+  padding: 8px;
+}
+
 .detailPane {
   padding: 0;
   height: 100%;
@@ -257,6 +304,10 @@ code {
   background-color: #2e2e2e;
 }
 
+.listLine.selected {
+  background-color: #3d3d3d;
+}
+
 .listLine:hover * {
   opacity: 1;
 }
@@ -349,11 +400,11 @@ code {
   overflow-x: hidden;
 }
 
-.line.selected {
-  background-color: #3d3d3d;
+.line:hover {
+  background-color: #2e2e2e;
 }
 
-.line:hover {
+.line.selected {
   background-color: #3d3d3d;
 }
 

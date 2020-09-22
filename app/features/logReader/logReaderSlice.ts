@@ -12,46 +12,71 @@ export interface Filter {
   color: string;
 }
 
+export interface Tab {
+  title?: string;
+  logPath?: string;
+  logLines?: Line[];
+  content?: Line[];
+  selectedLine?: number;
+  liveMode?: boolean;
+  followMode?: boolean;
+  search?: string;
+}
+
+// Refactor logPath, logLines, selectedLine into Tab
 const logReaderSlice = createSlice({
   name: 'logReader',
   initialState: {
-    logPath: ``,
-    logLines: [] as Line[],
-    selectedLine: 0,
     activePanel: 0,
     filters: [{ id: Date.now(), search: `Sample filter` } as Filter],
+    tabs: [] as Tab[],
+    activeTab: 0,
   },
   reducers: {
-    setLogPath: (state, action: PayloadAction<string>) => {
-      state.logPath = action.payload;
-    },
-    setLogLines: (state, action: PayloadAction<Line[]>) => {
-      state.logLines = action.payload;
-    },
-    setSelectedLine: (state, action: PayloadAction<number>) => {
-      state.selectedLine = action.payload;
-    },
     setActivePanel: (state, action: PayloadAction<number>) => {
       state.activePanel = action.payload;
     },
     setFilters: (state, action: PayloadAction<Filter[]>) => {
       state.filters = action.payload;
     },
+    addTab: (state, action: PayloadAction<Tab>) => {
+      state.tabs = [...state.tabs, action.payload];
+      state.activeTab = state.tabs.length - 1;
+    },
+    removeTab: (state, action: PayloadAction<number>) => {
+      state.tabs = state.tabs.filter(
+        (value: Tab, index: number) => index !== action.payload
+      );
+      state.activeTab -= 1;
+    },
+    updateTab: (state, action: PayloadAction<Tab>) => {
+      const updatedTabs = state.tabs.map((value: Tab) => {
+        if (value.logPath === action.payload.logPath) {
+          return { ...value, ...action.payload };
+        }
+        return value;
+      });
+      state.tabs = updatedTabs;
+    },
+    setActiveTab: (state, action: PayloadAction<number>) => {
+      state.activeTab = action.payload;
+    },
   },
 });
 
 export const {
-  setLogPath,
-  setLogLines,
-  setSelectedLine,
   setActivePanel,
   setFilters,
+  addTab,
+  removeTab,
+  updateTab,
+  setActiveTab,
 } = logReaderSlice.actions;
 
 export default logReaderSlice.reducer;
 
-export const selectLogPath = (state: RootState) => state.log.logPath;
-export const selectLogLines = (state: RootState) => state.log.logLines;
-export const selectSelectedLine = (state: RootState) => state.log.selectedLine;
 export const selectActivePanel = (state: RootState) => state.log.activePanel;
 export const selectFilters = (state: RootState) => state.log.filters;
+export const selectTabs = (state: RootState) => state.log.tabs;
+export const selectActiveTab = (state: RootState) =>
+  state.log.tabs[state.log.activeTab];

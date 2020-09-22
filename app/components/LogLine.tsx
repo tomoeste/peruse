@@ -11,21 +11,22 @@ import * as Highlighter from 'react-highlight-words';
 import { useDispatch, useSelector } from 'react-redux';
 import styles from './Home.css';
 import {
-  selectLogLines,
-  selectSelectedLine,
-  setSelectedLine,
+  selectActiveTab,
+  updateTab,
 } from '../features/logReader/logReaderSlice';
 
 export const LogLine = (props: any) => {
   const dispatch = useDispatch();
   const [loaded, setLoaded] = useState(false);
   const [logProperties, setLogProperties] = useState(null);
-  const logLines = useSelector(selectLogLines);
-  const selectedLine = useSelector(selectSelectedLine);
+  const activeTab = useSelector(selectActiveTab);
   const { itemProps, search } = props;
   const rowRef = createRef<HTMLDivElement>();
 
-  const item = logLines[itemProps.index];
+  const item =
+    activeTab && activeTab.content && activeTab.content.length > 0
+      ? activeTab.content[itemProps.index]
+      : { lineNumber: 0, logLine: `` };
   const { lineNumber, logLine } = item;
 
   useEffect(() => {
@@ -42,8 +43,8 @@ export const LogLine = (props: any) => {
   }, [logLine]);
 
   useEffect(() => {
-    if (lineNumber === selectedLine) rowRef?.current?.focus();
-  }, [lineNumber, rowRef, selectedLine]);
+    if (lineNumber === activeTab.selectedLine) rowRef?.current?.focus();
+  }, [lineNumber, rowRef, activeTab.selectedLine]);
 
   const searchWords = search && search.length > 0 ? search.split(' ') : [];
 
@@ -53,16 +54,17 @@ export const LogLine = (props: any) => {
         ref={rowRef}
         id={`logline${itemProps.index}`}
         className={`${styles.line} ${
-          lineNumber === selectedLine && styles.selected
+          lineNumber === activeTab.selectedLine && styles.selected
         }`}
         // eslint-disable-next-line react/no-array-index-key
         key={itemProps.index}
         style={itemProps.style}
         onClick={() => {
-          dispatch(setSelectedLine(lineNumber));
+          dispatch(updateTab({ ...activeTab, selectedLine: lineNumber }));
         }}
         onKeyPress={(ev: KeyboardEvent<HTMLDivElement>) => {
-          if (ev.key === 'Enter') dispatch(setSelectedLine(lineNumber));
+          if (ev.key === 'Enter')
+            dispatch(updateTab({ ...activeTab, selectedLine: lineNumber }));
         }}
         role="button"
         tabIndex={0}
@@ -115,6 +117,7 @@ export const LogLine = (props: any) => {
       </div>
     );
   }, [
+    activeTab,
     dispatch,
     itemProps.index,
     itemProps.style,
@@ -124,7 +127,6 @@ export const LogLine = (props: any) => {
     logProperties,
     rowRef,
     searchWords,
-    selectedLine,
   ]);
 };
 
